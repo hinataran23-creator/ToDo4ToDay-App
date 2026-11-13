@@ -22,9 +22,12 @@ jobs:
           channel: stable
 
       - name: Extract project
+        run: unzip source.zip -d app
+
+      - name: Prepare Android project
         run: |
-          unzip source.zip -d app
-          ls -la app
+          cd app
+          flutter create . --platforms=android
 
       - name: Build APK
         run: |
