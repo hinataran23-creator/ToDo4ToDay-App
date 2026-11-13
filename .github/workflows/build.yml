@@ -1,0 +1,39 @@
+
+name: Build ToDo4ToDay APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'source.zip'
+      - '.github/workflows/build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Extract project
+        run: |
+          unzip source.zip -d app
+          ls -la app
+
+      - name: Build APK
+        run: |
+          cd app
+          flutter pub get
+          flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToDo4ToDay-APK
+          path: app/build/app/outputs/flutter-apk/app-release.apk
